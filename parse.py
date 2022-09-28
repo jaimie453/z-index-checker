@@ -12,6 +12,16 @@ def get_curly_braces_start(stylesheet, z_index_start):
     return reverse_index - 1
 
 
+# removing any leading new lines, as they are not needed
+# new lines in rest of the selector are needed, e.g. for multiline selectors
+def remove_trailing_newlines(str):
+    start_index = 0
+    while str[start_index] == "\n":
+        start_index = start_index + 1
+        
+    return str[start_index:]
+
+
 # add characters to the selector until a previous rule '}' or comment '/' is encountered
 def get_selector(stylesheet, z_index_start):
     selector = ""
@@ -20,16 +30,7 @@ def get_selector(stylesheet, z_index_start):
         selector = stylesheet[reverse_index] + selector
         reverse_index = reverse_index - 1
     
-    # removing any leading new lines, as they are not needed
-    # new lines in rest of the selector are needed, e.g. for multiline selectors
-
-    selector_start_index = 0
-    while selector[selector_start_index] == "\n":
-        selector_start_index = selector_start_index + 1
-        
-    selector = selector[selector_start_index:]
-
-    return selector
+    return remove_trailing_newlines(selector)
 
 
 def get_z_index(str):
